@@ -24,7 +24,7 @@ datasheet = {'Isc':9.69, 'Voc':47, 'Imp':9.17, 'Vmp':38.7, 'Ns':72, 'u_sc':0.000
 # Column headers in CSV file must be G, T, Pmp
 data_file = 'gtp.csv'
 
-# Number of times the filling algorithm should run.  The Levenberg-Marquardt algorithm will
+# Number of times the fitting algorithm should run.  The Levenberg-Marquardt algorithm will
 # provide a local minima.  Running the fit multiple times with randomized starting points
 # can help find the global minimum but will not guarantee the global minimum is found.
 runs = 3

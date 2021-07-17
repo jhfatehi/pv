@@ -37,11 +37,14 @@ runs = 3
 # rand = if True the initial guess will be randomized uniformly within the range
 u_n=		{'value':0, 'min':-0.001, 'max':0.001, 'vary':True, 'rand':True} #diode ideality temp co
 Rs=			{'value':0, 'min':0.1, 'max':0.6, 'vary':True, 'rand':True} #series resistance
-Rsh_ref=	{'value':0, 'min':1000, 'max':10000, 'vary':True, 'rand':True} #shunt resistance at 1000 W/m^2
-Rsh_0=		{'value':0, 'min':100, 'max':1000, 'vary':True, 'rand':True} #shunt resistance at 0 W/m^2
+Rsh_ref=	{'value':0, 'min':100, 'max':1000, 'vary':True, 'rand':True} #shunt resistance at 1000 W/m^2
+Rsh_0=		{'value':0, 'min':1000, 'max':10000, 'vary':True, 'rand':True} #shunt resistance at 0 W/m^2
 Rsh_exp=	{'value':0, 'min':5, 'max':6, 'vary':True, 'rand':True} #shunt resistance exponential factor
-# NOTE	if the min and mac values for Rs and Rsh_ref are not realistic the diode ideality will be outside
-#		the solution range of [0.5, 2] and there will be an error.
+# NOTES	if the min and max values for Rs and Rsh_ref are not realistic the diode ideality will be outside
+#		the solution range of [0, 2] and there will be an error.
+#		
+#		if fitting HIT try increasing Rsh_ref.min to 200 if the above error is happening
+#		if fitting CdTe try insteasing Rs.max to 2.28, Rsh_ref.min to 2000, and rest of Rsh parapemters accordingly if the above error is happening
 
 ##################################################################################################
 
@@ -51,6 +54,8 @@ from numpy import exp, random
 from scipy.optimize import root_scalar
 from pandas import read_csv
 
+from time import time
+then = time()
 ##################################################################################################
 
 def calc_ref_vals(Isc, Voc, Imp, Vmp, Ns, Rs, Rsh):
@@ -74,8 +79,9 @@ def calc_ref_vals(Isc, Voc, Imp, Vmp, Ns, Rs, Rsh):
 	# NOTE		This could be done faster if the solution range of [0.5,2] is reduced.
 	def f(n):
 		return ((1-exp(q*(Imp*Rs-(Voc-Vmp))/Ns/k/T/n))/(1-exp(q*(Isc*Rs-Voc)/Ns/k/T/n))-(Imp*(Rsh+Rs)-(Voc-Vmp))/(Isc*(Rsh+Rs)-Voc))
-	sol = root_scalar(f, bracket=[0.5,2], method='brentq')
+	sol = root_scalar(f, bracket=[0,2], method='brentq')
 	n_ref = sol.root
+
 
 	'''
 	Single Diode pv cell model circuit from [2]
@@ -181,3 +187,5 @@ for ii in range(runs):
 
 	report_fit(result)
 	print('')
+
+print(time() - then)

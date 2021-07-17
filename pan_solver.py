@@ -18,7 +18,7 @@ References:
 ############# User Interface #####################################################################
 
 # These values are from the module datasheet.  All IV values are at STC.
-datasheet = {'Isc':9.69, 'Voc':47, 'Imp':9.17, 'Vmp':38.7, 'Ns':72, 'u_sc':0.0004}
+datasheet = {'Isc':9.69, 'Voc':47, 'Imp':9.17, 'Vmp':38.7, 'Ns':72, 'u_sc':0.005} #u_sc unit is A/dC
 
 # CSV file with irradiance and temperature test conditions and resulting Pmp value.
 # Column headers in CSV file must be G, T, Pmp
